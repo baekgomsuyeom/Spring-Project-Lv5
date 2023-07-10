@@ -3,14 +3,12 @@ package com.springproject.springprojectlv5.service;
 import com.springproject.springprojectlv5.dto.LoginRequestDto;
 import com.springproject.springprojectlv5.dto.SignOutRequestDto;
 import com.springproject.springprojectlv5.dto.SignupRequestDto;
-import com.springproject.springprojectlv5.entity.Board;
-import com.springproject.springprojectlv5.entity.Comment;
-import com.springproject.springprojectlv5.entity.User;
-import com.springproject.springprojectlv5.entity.UserRoleEnum;
+import com.springproject.springprojectlv5.entity.*;
 import com.springproject.springprojectlv5.exception.CustomException;
 import com.springproject.springprojectlv5.jwt.JwtUtil;
 import com.springproject.springprojectlv5.repository.BoardRepository;
 import com.springproject.springprojectlv5.repository.CommentRepository;
+import com.springproject.springprojectlv5.repository.ReplyRepository;
 import com.springproject.springprojectlv5.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private final ReplyRepository replyRepository;
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     // 회원 가입
@@ -128,5 +127,24 @@ public class UserService {
         }
 
         return comment;
+    }
+
+    // 사용자의 권한 확인 - 대댓글
+    public Reply findByReplyIdAndUser(Long replyId, User user) {
+        Reply reply;
+
+        // ADMIN
+        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
+            reply = replyRepository.findById(replyId).orElseThrow(
+                    () -> new CustomException(NOT_FOUND_COMMENT)
+            );
+        // USER
+        } else {
+            reply = replyRepository.findByIdAndUserId(replyId, user.getId()).orElseThrow (
+                    () -> new CustomException(NOT_FOUND_COMMENT_OR_AUTHORIZATION)
+            );
+        }
+
+        return reply;
     }
 }

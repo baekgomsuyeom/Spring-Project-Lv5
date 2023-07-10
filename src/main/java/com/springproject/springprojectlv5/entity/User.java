@@ -32,6 +32,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Reply> replyList = new ArrayList<>();
+
     public User(String username, String password, UserRoleEnum role) {
         this.username = username;
         this.password = password;
