@@ -84,7 +84,7 @@ public class UserService {
             board = boardRepository.findById(boardId).orElseThrow(
                     () -> new CustomException(NOT_FOUND_BOARD)
             );
-            // USER
+        // USER
         } else {
             board = boardRepository.findByIdAndUserId(boardId, user.getId()).orElseThrow (
                     () -> new CustomException(NOT_FOUND_BOARD_OR_AUTHORIZATION)
@@ -103,7 +103,7 @@ public class UserService {
             comment = commentRepository.findById(cmtId).orElseThrow(
                     () -> new CustomException(NOT_FOUND_COMMENT)
             );
-            // USER
+        // USER
         } else {
             comment = commentRepository.findByIdAndUserId(cmtId, user.getId()).orElseThrow (
                     () -> new CustomException(NOT_FOUND_COMMENT_OR_AUTHORIZATION)

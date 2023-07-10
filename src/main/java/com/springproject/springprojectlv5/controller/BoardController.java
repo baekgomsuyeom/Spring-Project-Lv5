@@ -26,14 +26,14 @@ public class BoardController {
 
     // 게시글 전체 조회
     @GetMapping("/board")
-    public ResponseEntity<List<BoardResponseDto>> getBoardList() {
-        return ResponseEntity.ok(boardService.getBoardList());
+    public ResponseEntity<List<BoardResponseDto>> getBoardList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(boardService.getBoardList(userDetails.getUser()));
     }
 
     // 게시글 선택 조회
     @GetMapping("/board/{boardId}")
-    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
-        return ResponseEntity.ok(boardService.getBoard(boardId));
+    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(boardService.getBoard(boardId, userDetails.getUser()));
     }
 
     // 게시글 수정
@@ -46,5 +46,11 @@ public class BoardController {
     @DeleteMapping("/board/{boardId}")
     public ResponseEntity<MsgResponseDto> deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(boardService.deleteBoard(boardId, userDetails.getUser()));
+    }
+
+    // 게시글 좋아요
+    @PostMapping("/board/like/{boardId}")
+    public ResponseEntity<MsgResponseDto> saveBoardLike(@PathVariable Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(boardService.saveBoardLike(boardId, userDetails.getUser()));
     }
 }
