@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "comment")
@@ -19,6 +22,9 @@ public class Comment extends Timestamped {
 
     @Column(name = "comment", nullable = false)
     private String comment;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<CommentLike> commentLikeList = new ArrayList<>();
 
     @ManyToOne                                          // comment : user : N : 1 다대일 단방향
     @JoinColumn(name = "user_id", nullable = false)

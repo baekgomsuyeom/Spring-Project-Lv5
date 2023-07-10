@@ -26,6 +26,9 @@ public class Board extends Timestamped {
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<BoardLike> boardLikeList = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)                  // board : user = N : 1 다대일 단방향
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
