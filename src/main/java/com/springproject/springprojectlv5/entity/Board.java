@@ -29,13 +29,15 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<BoardLike> boardLikeList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Reply> replyList = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)                  // board : user = N : 1 다대일 단방향
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)        // comment : board : N : 1 다대일 양방향
     private List<Comment> commentList = new ArrayList<>();
-
 
     // 게시글 작성
     public Board(BoardRequestDto requestDto, User user) {

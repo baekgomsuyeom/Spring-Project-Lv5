@@ -27,6 +27,7 @@ public enum ErrorCode {
 
     // DB 에 해당 댓글이 존재하지 않는 경우
     NOT_FOUND_COMMENT(HttpStatus.BAD_REQUEST, "댓글을 찾을 수 없습니다."),
+    NOT_FOUND_REPLY(HttpStatus.BAD_REQUEST, "대댓글을 찾을 수 없습니다."),
 
     // admin 계정으로 회원가입 시, ADMIN_TOKEN 과 일치하지 않을 경우
     NOT_MATCH_ADMIN_TOKEN(HttpStatus.BAD_REQUEST, "관리자 암호가 일치하지 않습니다.");

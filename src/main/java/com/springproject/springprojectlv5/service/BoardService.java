@@ -1,18 +1,9 @@
 package com.springproject.springprojectlv5.service;
 
-import com.springproject.springprojectlv5.dto.BoardRequestDto;
-import com.springproject.springprojectlv5.dto.BoardResponseDto;
-import com.springproject.springprojectlv5.dto.CommentResponseDto;
-import com.springproject.springprojectlv5.dto.MsgResponseDto;
-import com.springproject.springprojectlv5.entity.Board;
-import com.springproject.springprojectlv5.entity.BoardLike;
-import com.springproject.springprojectlv5.entity.Comment;
-import com.springproject.springprojectlv5.entity.User;
+import com.springproject.springprojectlv5.dto.*;
+import com.springproject.springprojectlv5.entity.*;
 import com.springproject.springprojectlv5.exception.CustomException;
-import com.springproject.springprojectlv5.repository.BoardLikeRepository;
-import com.springproject.springprojectlv5.repository.BoardRepository;
-import com.springproject.springprojectlv5.repository.CommentLikeRepository;
-import com.springproject.springprojectlv5.repository.UserRepository;
+import com.springproject.springprojectlv5.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,6 +22,7 @@ public class BoardService {
     private final UserRepository userRepository;
     private final BoardLikeRepository boardLikeRepository;
     private final CommentService commentService;
+    private final ReplyService replyService;
 
     // 게시글 작성
     public BoardResponseDto createBoard(BoardRequestDto requestDto, User user) {
@@ -50,7 +42,12 @@ public class BoardService {
         for (Board board : boardList) {
             List<CommentResponseDto> commentList = new ArrayList<>();
             for (Comment comment : board.getCommentList()) {
-                commentList.add(new CommentResponseDto(comment, commentService.checkCommentLike(comment.getId(), user)));
+                List<ReplyResponseDto> replyResponseDtoList = new ArrayList<>();
+                for (Reply reply : comment.getReplyList()) {
+                    replyResponseDtoList.add(new ReplyResponseDto(reply, replyService.checkReplyLike(reply.getId(), user)));
+                }
+
+                commentList.add(new CommentResponseDto(comment, replyResponseDtoList, commentService.checkCommentLike(comment.getId(), user)));
             }
 
             boardResponseDtoList.add(new BoardResponseDto(board, commentList, checkBoardLike(board.getId(), user)));
@@ -67,7 +64,12 @@ public class BoardService {
 
         List<CommentResponseDto> commentList = new ArrayList<>();
         for (Comment comment : board.getCommentList()) {
-            commentList.add(new CommentResponseDto(comment, commentService.checkCommentLike(comment.getId(), user)));
+            List<ReplyResponseDto> replyResponseDtoList = new ArrayList<>();
+            for (Reply reply : comment.getReplyList()) {
+                replyResponseDtoList.add(new ReplyResponseDto(reply, replyService.checkReplyLike(reply.getId(), user)));
+            }
+
+            commentList.add(new CommentResponseDto(comment, replyResponseDtoList, commentService.checkCommentLike(comment.getId(), user)));
         }
 
         return new BoardResponseDto(board, commentList, checkBoardLike(board.getId(), user));
@@ -84,7 +86,12 @@ public class BoardService {
 
         List<CommentResponseDto> commentList = new ArrayList<>();
         for (Comment comment : board.getCommentList()) {
-            commentList.add(new CommentResponseDto(comment, commentService.checkCommentLike(comment.getId(), user)));
+            List<ReplyResponseDto> replyResponseDtoList = new ArrayList<>();
+            for (Reply reply : comment.getReplyList()) {
+                replyResponseDtoList.add(new ReplyResponseDto(reply, replyService.checkReplyLike(reply.getId(), user)));
+            }
+
+            commentList.add(new CommentResponseDto(comment, replyResponseDtoList, commentService.checkCommentLike(comment.getId(), user)));
         }
 
         return new BoardResponseDto(board, commentList, checkBoardLike(board.getId(), user));

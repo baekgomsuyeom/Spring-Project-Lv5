@@ -3,11 +3,13 @@ package com.springproject.springprojectlv5.service;
 import com.springproject.springprojectlv5.dto.CommentRequestDto;
 import com.springproject.springprojectlv5.dto.CommentResponseDto;
 import com.springproject.springprojectlv5.dto.MsgResponseDto;
+import com.springproject.springprojectlv5.dto.ReplyResponseDto;
 import com.springproject.springprojectlv5.entity.*;
 import com.springproject.springprojectlv5.exception.CustomException;
 import com.springproject.springprojectlv5.repository.BoardRepository;
 import com.springproject.springprojectlv5.repository.CommentLikeRepository;
 import com.springproject.springprojectlv5.repository.CommentRepository;
+import com.springproject.springprojectlv5.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
     private final UserService userService;
+    private final ReplyRepository replyRepository;
 
 
     // 댓글 작성
