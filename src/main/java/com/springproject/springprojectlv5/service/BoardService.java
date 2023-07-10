@@ -30,7 +30,6 @@ public class BoardService {
     private final UserService userService;
     private final UserRepository userRepository;
     private final BoardLikeRepository boardLikeRepository;
-//    private final CommentLikeRepository commentLikeRepository;
     private final CommentService commentService;
 
     // 게시글 작성

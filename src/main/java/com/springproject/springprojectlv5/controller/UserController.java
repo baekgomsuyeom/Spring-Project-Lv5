@@ -2,17 +2,17 @@ package com.springproject.springprojectlv5.controller;
 
 import com.springproject.springprojectlv5.dto.LoginRequestDto;
 import com.springproject.springprojectlv5.dto.MsgResponseDto;
+import com.springproject.springprojectlv5.dto.SignOutRequestDto;
 import com.springproject.springprojectlv5.dto.SignupRequestDto;
+import com.springproject.springprojectlv5.security.UserDetailsImpl;
 import com.springproject.springprojectlv5.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,5 +32,12 @@ public class UserController {
     public ResponseEntity<MsgResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         userService.login(loginRequestDto, response);
         return ResponseEntity.ok(new MsgResponseDto("로그인 완료", HttpStatus.OK.value()));
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/signOut")
+    private ResponseEntity<MsgResponseDto> signOut(@RequestBody SignOutRequestDto signOutRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.signOut(signOutRequestDto);
+        return ResponseEntity.ok(new MsgResponseDto("회원탈퇴 완료", HttpStatus.OK.value()));
     }
 }

@@ -36,6 +36,7 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)        // comment : board : N : 1 다대일 양방향
     private List<Comment> commentList = new ArrayList<>();
 
+
     // 게시글 작성
     public Board(BoardRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();

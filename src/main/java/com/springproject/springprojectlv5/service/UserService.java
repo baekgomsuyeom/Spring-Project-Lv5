@@ -1,6 +1,7 @@
 package com.springproject.springprojectlv5.service;
 
 import com.springproject.springprojectlv5.dto.LoginRequestDto;
+import com.springproject.springprojectlv5.dto.SignOutRequestDto;
 import com.springproject.springprojectlv5.dto.SignupRequestDto;
 import com.springproject.springprojectlv5.entity.Board;
 import com.springproject.springprojectlv5.entity.Comment;
@@ -32,9 +33,9 @@ public class UserService {
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     // 회원 가입
-    public void signup(SignupRequestDto requestDto) {
-        String username = requestDto.getUsername();
-        String password = passwordEncoder.encode(requestDto.getPassword());
+    public void signup(SignupRequestDto signupRequestDto) {
+        String username = signupRequestDto.getUsername();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
@@ -44,8 +45,8 @@ public class UserService {
 
         // 사용자 ROLE 확인 (admin = true 일 경우 아래 코드 수행)
         UserRoleEnum role = UserRoleEnum.USER;
-        if (requestDto.isAdmin()) {
-            if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
+        if (signupRequestDto.isAdmin()) {
+            if (!ADMIN_TOKEN.equals(signupRequestDto.getAdminToken())) {
                 throw new CustomException(NOT_MATCH_ADMIN_TOKEN);
             }
 
@@ -73,6 +74,22 @@ public class UserService {
 
         // Header 에 key 값과 Token 담기
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, JwtUtil.createToken(user.getUsername(), user.getRole()));
+    }
+
+    // 회원탈퇴
+    public void signOut(SignOutRequestDto signOutRequestDto) {
+
+        // 사용자명 일치 여부 확인
+        User user = userRepository.findByUsername(signOutRequestDto.getUsername()).orElseThrow(
+                () -> new CustomException(NOT_MATCH_INFORMATION)
+        );
+
+        // 비밀번호 일치 여부 확인
+        if (!passwordEncoder.matches(signOutRequestDto.getPassword(), user.getPassword())) {
+            throw new CustomException(NOT_MATCH_INFORMATION);
+        }
+
+        userRepository.deleteById(user.getId());
     }
 
     // 사용자의 권한 확인 - 게시글
