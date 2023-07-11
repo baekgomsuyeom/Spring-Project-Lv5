@@ -19,7 +19,7 @@ public class CommentResponseDto {
     private LocalDateTime modifiedAt;
     private List<ReplyResponseDto> replyList = new ArrayList<>();       // 게시글 조회 시, 댓글 목록도 함께 조회
 
-    // 게시글과 함께 조회되는 댓글 및 댓글 작성, 수정
+    // 댓글 작성, 수정
     public CommentResponseDto(Comment comment, boolean commentLikeCheck) {
         this.id = comment.getId();
         this.username = comment.getUsername();
@@ -30,6 +30,7 @@ public class CommentResponseDto {
         this.modifiedAt = comment.getModifiedAt();
     }
 
+    // 게시글과 함께 조회되는 댓글 & 대댓글
     public CommentResponseDto(Comment comment, List<ReplyResponseDto> replyList, boolean commentLikeCheck) {
         this.id = comment.getId();
         this.username = comment.getUsername();

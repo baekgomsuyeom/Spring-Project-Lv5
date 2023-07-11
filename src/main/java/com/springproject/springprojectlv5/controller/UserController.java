@@ -37,7 +37,7 @@ public class UserController {
     // 회원 탈퇴
     @DeleteMapping("/signOut")
     private ResponseEntity<MsgResponseDto> signOut(@RequestBody SignOutRequestDto signOutRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        userService.signOut(signOutRequestDto);
+        userService.signOut(signOutRequestDto, userDetails.getUser());
         return ResponseEntity.ok(new MsgResponseDto("회원탈퇴 완료", HttpStatus.OK.value()));
     }
 }

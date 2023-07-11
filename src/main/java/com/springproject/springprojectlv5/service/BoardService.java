@@ -19,7 +19,6 @@ import static com.springproject.springprojectlv5.exception.ErrorCode.NOT_FOUND_B
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserService userService;
-    private final UserRepository userRepository;
     private final BoardLikeRepository boardLikeRepository;
     private final CommentService commentService;
     private final ReplyService replyService;
@@ -37,11 +36,13 @@ public class BoardService {
     public List<BoardResponseDto> getBoardList(User user) {
         List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
 
+        // 게시글
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
-
         for (Board board : boardList) {
+            // 댓글
             List<CommentResponseDto> commentList = new ArrayList<>();
             for (Comment comment : board.getCommentList()) {
+                // 대댓글
                 List<ReplyResponseDto> replyResponseDtoList = new ArrayList<>();
                 for (Reply reply : comment.getReplyList()) {
                     replyResponseDtoList.add(new ReplyResponseDto(reply, replyService.checkReplyLike(reply.getId(), user)));
@@ -58,12 +59,15 @@ public class BoardService {
 
     // 게시글 선택 조회
     public BoardResponseDto getBoard(Long boardId, User user) {
+        // 게시글이 있는지
         Board board = boardRepository.findById(boardId).orElseThrow (
                 () -> new CustomException(NOT_FOUND_BOARD)
         );
 
+        // 댓글
         List<CommentResponseDto> commentList = new ArrayList<>();
         for (Comment comment : board.getCommentList()) {
+            // 대댓글
             List<ReplyResponseDto> replyResponseDtoList = new ArrayList<>();
             for (Reply reply : comment.getReplyList()) {
                 replyResponseDtoList.add(new ReplyResponseDto(reply, replyService.checkReplyLike(reply.getId(), user)));
@@ -78,14 +82,15 @@ public class BoardService {
     // 게시글 수정
     @Transactional
     public BoardResponseDto updateBoard(Long boardId, BoardRequestDto requestDto, User user) {
-
         // 게시글이 있는지 & 사용자의 권한 확인
         Board board = userService.findByBoardIdAndUser(boardId, user);
 
         board.update(requestDto);
 
+        // 댓글
         List<CommentResponseDto> commentList = new ArrayList<>();
         for (Comment comment : board.getCommentList()) {
+            // 대댓글
             List<ReplyResponseDto> replyResponseDtoList = new ArrayList<>();
             for (Reply reply : comment.getReplyList()) {
                 replyResponseDtoList.add(new ReplyResponseDto(reply, replyService.checkReplyLike(reply.getId(), user)));
@@ -99,7 +104,6 @@ public class BoardService {
 
     // 게시글 삭제
     public MsgResponseDto deleteBoard(Long boardId, User user) {
-
         // 게시글이 있는지 & 사용자의 권한 확인
         Board board = userService.findByBoardIdAndUser(boardId, user);
 
@@ -117,7 +121,6 @@ public class BoardService {
     // 게시글 좋아요 개수
     @Transactional
     public MsgResponseDto saveBoardLike(Long boardId, User user) {
-
         // 게시글이 있는지
         Board board = boardRepository.findById(boardId).orElseThrow (
                 () -> new CustomException(NOT_FOUND_BOARD)

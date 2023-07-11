@@ -29,13 +29,13 @@ public class Comment extends Timestamped {
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<Reply> replyList = new ArrayList<>();
 
-    @ManyToOne                                          // comment : user : N : 1 다대일 단방향
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)                  // comment : board = N : 1 다대일 양방향
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     // 댓글 작성
     public Comment(CommentRequestDto commentRequestDto, Board board, User user) {

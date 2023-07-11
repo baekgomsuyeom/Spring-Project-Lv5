@@ -27,12 +27,9 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
     private final UserService userService;
-    private final ReplyRepository replyRepository;
-
 
     // 댓글 작성
     public CommentResponseDto createComment(Long boardId, CommentRequestDto commentRequestDto, User user) {
-
         // 게시글이 있는지
         Board board = boardRepository.findById(boardId).orElseThrow (
                 () -> new CustomException(NOT_FOUND_BOARD)
@@ -47,7 +44,6 @@ public class CommentService {
     // 댓글 수정
     @Transactional
     public CommentResponseDto updateComment(Long boardId, Long cmtId, CommentRequestDto commentRequestDto, User user) {
-
         // 게시글이 있는지
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new CustomException(NOT_FOUND_BOARD)
@@ -63,7 +59,6 @@ public class CommentService {
 
     // 댓글 삭제
     public MsgResponseDto deleteComment(Long boardId, Long cmtId, User user) {
-
         // 게시글이 있는지
         Board board = boardRepository.findById(boardId).orElseThrow (
                 () -> new CustomException(NOT_FOUND_BOARD)
@@ -86,7 +81,6 @@ public class CommentService {
     // 댓글 좋아요 개수
     @Transactional
     public MsgResponseDto saveCommentLike(Long boardId, Long cmtId, User user) {
-
         // 게시글이 있는지
         Board board = boardRepository.findById(boardId).orElseThrow (
                 () -> new CustomException(NOT_FOUND_BOARD)
