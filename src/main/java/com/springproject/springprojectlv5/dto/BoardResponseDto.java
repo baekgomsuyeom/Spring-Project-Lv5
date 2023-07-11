@@ -19,7 +19,7 @@ public class BoardResponseDto {
     private boolean boardLikeCheck;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private List<CommentResponseDto> commentList = new ArrayList<>();       // 게시글 조회 시, 댓글 목록도 함께 조회
+    private List<CommentResponseDto> commentList = new ArrayList<>();
 
     // 게시글 작성
     public BoardResponseDto(Board board) {

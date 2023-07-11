@@ -76,10 +76,10 @@ public class UserService {
     }
 
     // 회원탈퇴
-    public void signOut(SignOutRequestDto signOutRequestDto) {
+    public void signOut(SignOutRequestDto signOutRequestDto, User user) {
 
         // 사용자명 일치 여부 확인
-        User user = userRepository.findByUsername(signOutRequestDto.getUsername()).orElseThrow(
+        user = userRepository.findByUsername(signOutRequestDto.getUsername()).orElseThrow(
                 () -> new CustomException(NOT_MATCH_INFORMATION)
         );
 
@@ -136,12 +136,12 @@ public class UserService {
         // ADMIN
         if (user.getRole().equals(UserRoleEnum.ADMIN)) {
             reply = replyRepository.findById(replyId).orElseThrow(
-                    () -> new CustomException(NOT_FOUND_COMMENT)
+                    () -> new CustomException(NOT_FOUND_REPLY)
             );
         // USER
         } else {
             reply = replyRepository.findByIdAndUserId(replyId, user.getId()).orElseThrow (
-                    () -> new CustomException(NOT_FOUND_COMMENT_OR_AUTHORIZATION)
+                    () -> new CustomException(NOT_FOUND_REPLY_OR_AUTHORIZATION)
             );
         }
 
